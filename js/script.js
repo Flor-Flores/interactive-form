@@ -60,8 +60,8 @@ let activityTotalDiv = document.createElement("div");
 const activity = document.querySelector('.activities');
 let totalActivityCost = 0;
 const totalString =`Total: $ ${totalActivityCost}`;
-activityTotalDiv.innerHTML = totalString;
-activity.appendChild(activityTotalDiv);
+    activityTotalDiv.innerHTML = totalString;
+    activity.appendChild(activityTotalDiv);
 
 
 //event handler looking for changes in the activity section;
@@ -78,70 +78,111 @@ activity.addEventListener('change', (e) => {
         totalActivityCost -= checkedCost;
         activityTotalDiv.innerHTML = `Total: $ ${totalActivityCost}`;
     }
-
-
-
     const clicked = e.target;
     const checked = clicked.checked;
     const checkedTime = clicked.getAttribute('data-day-and-time');
-
+ 
     for (let i = 0; i <activityLabels.length; i++) {
 
         if(checked === true) {
             console.log("inside first if")
             if(activityLabels[i].getAttribute('data-day-and-time') === checkedTime && activityLabels[i] !== clicked){
                 activityLabels[i].disabled = true;
-                console.log("i jsut disabled this" + activityLabels[i])
             }
         } else if(checked === false && activityLabels[i].checked === false && activityLabels[i].getAttribute('data-day-and-time') === checkedTime){
             activityLabels[i].disabled = false;
-            console.log("I just enabled all the boxex again")
-
         }
     }
 
 
-    // for (let i = 0; i <activityLabels.length; i++) {
-
-    //     if(clicked === activityLabels[i] && checked === false) {
-    //         console.log(activityLabels[i])
-    //         activityLabels[i].disabled = false;
-    //         console.log("firt if")
-
-    //     }else {
-    //         console.log("not thisone" + activityLabels[i].getAttribute('data-day-and-time'))
-    //         if(activityLabels[i].getAttribute('data-day-and-time') === checkedTime && activityLabels[i] !== checked){
-    //             activityLabels[i].disabled = true;
-    //             console.log("i jsut disabled this" + activityLabels[i])
-    //         }
-    //     }
-    // }
-        
-
 });
 
 
+//payments
+const payments = document.querySelector('#payment');
+console.log(payments);
+const creditCard = document.querySelector("#payment [value='credit card']" );
+const paypal = document.querySelector("#payment [value='paypal']" );
+const bitcoin = document.querySelector("#payment [value='bitcoin']" );
+
+creditCard.selected = true;
+
+const creditCardDiv = document.querySelector('#credit-card');
+const paypalDiv = document.querySelector("#paypal" );
+const bitcoinDiv = document.querySelector("#bitcoin" );
+
+paypalDiv.style.display = 'none';
+bitcoinDiv.style.display = 'none';
+
+
+payments.addEventListener('change', (e) => {
+    paymentSelection = e.target.value;
+    if (paymentSelection === creditCard.value ){
+        creditCardDiv.style.display = 'block';
+        paypalDiv.style.display = 'none';
+        bitcoinDiv.style.display = 'none';
+    }else if(paymentSelection === paypal.value){
+        creditCardDiv.style.display = 'none';
+        paypalDiv.style.display = 'block';
+        bitcoinDiv.style.display = 'none';
+    }else if(paymentSelection === bitcoin.value){
+        creditCardDiv.style.display = 'none';
+        paypalDiv.style.display = 'none';
+        bitcoinDiv.style.display = 'block';
+    }
+});
+
+
+// There are three sections of the form that are always required: name, email, and activities. The
+// credit section—comprised of three inputs—only needs to be validated if “credit card” is the
+// selected payment method. To keep things simple, you can create a function to validate each
+// required section, as well as add and remove a validation error indicator of some sort.
+// Each required section will need to be tested to see if it meets certain criteria, which are detailed
+// in the project instructions. If the criteria are not met, the validation function should add a
+// validation error indication for that field and return false. Else, the function should remove any
+// validation error indicator and return true.
 
 
 
 
-// let checkedTime = e.target.getAttribute('data-day-and-time');
-// ///check what I just checked. 
-// // if not checked = true, and it is not disabled. loop through all. and if another has time conflictTime, disable it. otherwise enable it. 
-//         for(let i = 0; i <activityLabels.length; i++){
-            
-//             let conflictTime = activityLabels[i].getAttribute('data-day-and-time');
-
-//             if(isCheck === false && checkedTime === conflictTime){
-//                 alert('Cant over book');
-//                 activityLabels[i].disabled = true;
-//                 console.log(activityLabels[i])
-//             }else if(isCheck === false && checkedTime !== conflictTime){
-//                 alert('ok book');
-//                 activityLabels[i].disabled = false;
-
-//             }
-//         }
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+// const payments = document.querySelector('#payment');
+// console.log(payments);
+// // const creditCard = payments[1];
+// const creditCard = document.querySelector("#payment [value='credit card']" );
+// const paypal = document.querySelector("#payment [value='paypal']" );
+// const bitcoin = document.querySelector("#payment [value='bitcoin']" );
+// // const creditCard = payments.value['credit card'];
+// console.log(creditCard.selected);
+
+// creditCard.selected = true;
+
+
+// const creditCardDiv = document.querySelector('#credit-card');
+// const paypalDiv = document.querySelector("#paypal" );
+// const bitcoinDiv = document.querySelector("#bitcoin" );
+
+// paypalDiv.style.display = 'none';
+// bitcoinDiv.style.display = 'none';
+
+// payments.addEventListener('change', (e) => {
+//     paymentSelection = e.target.value;
+//     alert(paymentSelection)
+ 
+
+    
+// });
