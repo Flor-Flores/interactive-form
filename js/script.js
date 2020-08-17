@@ -8,10 +8,10 @@ window.onload = function() {
 const colorLabel = document.querySelector('.shirt-colors label');
     colorLabel.innerText = "Please select a T-shirt theme.";
 // creates 2 arrays for the different color sets.
-    let color = document.querySelector("#color");
-    let colors = document.querySelectorAll("#color option");
-    let punColors = [];
-    let heartColors= [];
+let color = document.querySelector("#color");
+let colors = document.querySelectorAll("#color option");
+let punColors = [];
+let heartColors= [];
 for (let i = 0; i < colors.length; i++){
         let colorInnerText = colors[i].innerText.toLowerCase();
         let punColor = colorInnerText.includes("puns");
@@ -53,16 +53,15 @@ document.getElementById("design").addEventListener("change", e =>{
     if(designSelection === "Select Theme"){ 
         removeColorFilter()
         colorLabel.innerText = "Please select a T-shirt theme.";   
-        
-}
-
+    }
 });
 
-let activityTotal = document.createElement("div");
-    const activity = document.querySelector('.activities');
+let activityTotalDiv = document.createElement("div");
+const activity = document.querySelector('.activities');
 let totalActivityCost = 0;
-    activityTotal.innerHTML =totalActivityCost;
-    activity.appendChild(activityTotal);
+const totalString =`Total: $ ${totalActivityCost}`;
+activityTotalDiv.innerHTML = totalString;
+activity.appendChild(activityTotalDiv);
 
 
 //event handler looking for changes in the activity section;
@@ -71,39 +70,52 @@ activity.addEventListener('change', (e) => {
     let checkedCost = parseInt(e.target.getAttribute('data-cost'));
     const activityLabels = document.querySelectorAll('.activities label input');
 
-//this conditional adds the totalActivityCost;
+//this conditional calculates the totalActivityCost;
     if(isCheck === true) {
         totalActivityCost += checkedCost;
-        activityTotal.innerHTML =totalActivityCost;
+        activityTotalDiv.innerHTML = `Total: $ ${totalActivityCost}`;
     }else if(isCheck === false){
         totalActivityCost -= checkedCost;
-        activityTotal.innerHTML =totalActivityCost;
+        activityTotalDiv.innerHTML = `Total: $ ${totalActivityCost}`;
     }
 
 
 
     const clicked = e.target;
-        console.log(clicked)
     const checked = clicked.checked;
-        console.log(checked)
     const checkedTime = clicked.getAttribute('data-day-and-time');
-        console.log(checkedTime)
 
-        console.log("----------------------------------------------------")
     for (let i = 0; i <activityLabels.length; i++) {
 
-        if(clicked === activityLabels[i]){
-            console.log(activityLabels[i])
-            console.log("firt if")
-
-        }else {
-            console.log("not thisone" + activityLabels[i].getAttribute('data-day-and-time'))
-            if(activityLabels[i].getAttribute('data-day-and-time') === checkedTime && activityLabels[i] !== checked){
+        if(checked === true) {
+            console.log("inside first if")
+            if(activityLabels[i].getAttribute('data-day-and-time') === checkedTime && activityLabels[i] !== clicked){
                 activityLabels[i].disabled = true;
                 console.log("i jsut disabled this" + activityLabels[i])
             }
+        } else if(checked === false && activityLabels[i].checked === false && activityLabels[i].getAttribute('data-day-and-time') === checkedTime){
+            activityLabels[i].disabled = false;
+            console.log("I just enabled all the boxex again")
+
         }
     }
+
+
+    // for (let i = 0; i <activityLabels.length; i++) {
+
+    //     if(clicked === activityLabels[i] && checked === false) {
+    //         console.log(activityLabels[i])
+    //         activityLabels[i].disabled = false;
+    //         console.log("firt if")
+
+    //     }else {
+    //         console.log("not thisone" + activityLabels[i].getAttribute('data-day-and-time'))
+    //         if(activityLabels[i].getAttribute('data-day-and-time') === checkedTime && activityLabels[i] !== checked){
+    //             activityLabels[i].disabled = true;
+    //             console.log("i jsut disabled this" + activityLabels[i])
+    //         }
+    //     }
+    // }
         
 
 });
