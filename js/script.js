@@ -142,46 +142,166 @@ payments.addEventListener('change', (e) => {
 // validation error indication for that field and return false. Else, the function should remove any
 // validation error indicator and return true.
 
+const form = document.querySelector("form");
+const name = document.querySelector("#name");
+const email = document.querySelector("#email");
 
 
-//last attempt
-const form = document.querySelector('form');
+//Divs to display each error.
+const errorName = document.createElement("div"); 
+const errorEmail = document.createElement("div"); 
+const errorActivities = document.createElement("div"); 
 
-function nameValidator(e){
+const nameValidator = () => {
+    const name = document.querySelector('#name');
+  
+    if(name.value.length > 0){
+      name.style.border = 'white';
+  
+      if(errorName){
+        errorName.remove();
+      }
+      return true;
+    }else{
+      name.style.border = '2px solid red';
+  
+      name.before(errorName);
+      errorName.innerText = "Please enter a valid name";
+      return false;
+    }
+  }
+  
 
+
+
+/* Helper function to validate email input */
+const emailValidator = () => {
+    const email = document.querySelector('#mail');
+    const atSymb = email.value.indexOf('@');
+    const dot = email.value.lastIndexOf('.');
+  
+    if(atSymb > 1 && dot > atSymb){
+      email.style.border = 'white';
+
+      if(errorEmail){
+        errorEmail.remove();
+      }
+      return true;
+    }else{
+      email.style.border = '2px solid red';
+      email.before(errorEmail);
+      errorEmail.innerText = "Please enter a valid email";
+      return false;
+    }
+  
+  }
+// At least one checkbox under "Register for Activities" section must be selected.
+/* Helper function to validate activities */
+const activitiesValidator = () => {
+    const activities = document.querySelectorAll('.activities label input');
+    const activityErrLocation = document.querySelector('.activities legend');
+    for (let i = 0; i <activities.length; i++){
+        if(activities[i].checked === false){
+            activityErrLocation.style.border = '2px solid red';
+            activityErrLocation.appendChild(errorActivities);
+            errorActivities.innerText = "Please select at least one activity";
+            return false;
+        }else {
+            alert('you have selected and activity!');
+            activityErrLocation.style.border = '0px solid white';
+            errorActivities.remove();
+            return true;
+        }
+    }
+    
+  }
+
+/* Helper function to validate credit card */
+const creditCardValidator = () => {
+    const creditCardInput = document.getElementById('cc-num');
+    const creditCardZip = document.getElementById('zip');
+    const creditCardCVV = document.getElementById('cvv');
+    
+    console.log(creditCardInput.value);
+    console.log(creditCardZip.value);
+    console.log(creditCardCVV.value);
+
+    const str = 'hello world!';
+    const result = /^hello/.test(str);
+    
+    console.log(result); // true
     
 
-    const name = document.querySelector('#name');
-
-    let nameError = document.createElement('div');
-    nameError.innerText = "please enter a name";
-    nameError.className = 'burn';
-
-    if(name.value.length <= 0 ){
-        console.log(name);
-        console.log('please enter a name')
-        let label = name.previousElementSibling;
-        label.appendChild(nameError);
 
 
-        e.preventDefault();
-    }else if(name.value.length >= 0){
-        alert('thank you for the name');
-        document.querySelector('.burn').innerHTML='';
-        e.preventDefault();
+  }
 
+
+
+
+
+
+/* Submit listener on the form element */
+form.addEventListener('submit', (e) => {
+    if(!nameValidator()){
+      e.preventDefault();
+    }
+  
+    if(!emailValidator()){
+      e.preventDefault();
     }
 
-}
+    if(!activitiesValidator()){
+        e.preventDefault();
+    }
+    e.preventDefault();
 
-form.addEventListener('submit', (e)=>{
-    nameValidator(e);
-    // e.preventDefault();
-})
+  console.log('Submit handler is functional!');
+});
 
 
 
 // //last attempt
+// //last attempt
+// function errorHandler(sibling, errorMessage){
+//     let ValidationError = document.createElement('div');
+//     ValidationError.innerText = errorMessage;
+//     ValidationError.className = 'Validation-Error';
+//     sibling.appendChild(ValidationError);
+//     // sibling.removeChild(ValidationError);
+
+// }
+// function errorDelete(sibling){
+// sibling.removeChild(sibling.childNodes[0]);
+
+// }
+
+// const form = document.querySelector('form');
+
+// function nameValidator(e){
+
+// const name = document.querySelector('#name');
+// let label = document.querySelector('#name').previousElementSibling;
+
+
+// if(name.value.length <= 0 ){
+//     console.log('please enter a name')
+
+//     errorHandler(label, 'Please enter a name')
+
+// }else if(name.value.length >= 0){
+
+//     errorDelete(label);
+
+
+// }
+
+// }
+
+
+
+
+
 // let label = name.previousElementSibling;
 
 // const form = document.querySelector('form');
