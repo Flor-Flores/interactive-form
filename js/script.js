@@ -144,45 +144,70 @@ payments.addEventListener('change', (e) => {
 
 
 
+//last attempt
+const form = document.querySelector('form');
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// const payments = document.querySelector('#payment');
-// console.log(payments);
-// // const creditCard = payments[1];
-// const creditCard = document.querySelector("#payment [value='credit card']" );
-// const paypal = document.querySelector("#payment [value='paypal']" );
-// const bitcoin = document.querySelector("#payment [value='bitcoin']" );
-// // const creditCard = payments.value['credit card'];
-// console.log(creditCard.selected);
-
-// creditCard.selected = true;
-
-
-// const creditCardDiv = document.querySelector('#credit-card');
-// const paypalDiv = document.querySelector("#paypal" );
-// const bitcoinDiv = document.querySelector("#bitcoin" );
-
-// paypalDiv.style.display = 'none';
-// bitcoinDiv.style.display = 'none';
-
-// payments.addEventListener('change', (e) => {
-//     paymentSelection = e.target.value;
-//     alert(paymentSelection)
- 
+function nameValidator(e){
 
     
-// });
+
+    const name = document.querySelector('#name');
+
+    let nameError = document.createElement('div');
+    nameError.innerText = "please enter a name";
+    nameError.className = 'burn';
+
+    if(name.value.length <= 0 ){
+        console.log(name);
+        console.log('please enter a name')
+        let label = name.previousElementSibling;
+        label.appendChild(nameError);
+
+
+        e.preventDefault();
+    }else if(name.value.length >= 0){
+        alert('thank you for the name');
+        document.querySelector('.burn').innerHTML='';
+        e.preventDefault();
+
+    }
+
+}
+
+form.addEventListener('submit', (e)=>{
+    nameValidator(e);
+    // e.preventDefault();
+})
+
+
+
+// //last attempt
+// let label = name.previousElementSibling;
+
+// const form = document.querySelector('form');
+
+// form.addEventListener('submit', (e)=>{
+//     const name = document.querySelector('#name');
+//     let label = name.previousElementSibling;
+//     console.log(label)
+
+//     let nameError = document.createElement('div');
+//     nameError.innerText = "please enter a name";
+
+//     if(name.value.length <= 0 ){
+//         console.log(name);
+//         console.log('please enter a name')
+//             label.appendChild(nameError);
+//             // var x = document.getElementById("item2").previousSibling.innerHTML;
+
+
+//         e.preventDefault();
+//     }else if(name.value.length >= 0){
+//         alert('thank you for the name');
+
+//     }
+
+//     e.preventDefault();
+// })
+
+
