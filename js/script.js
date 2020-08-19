@@ -19,8 +19,12 @@ for (let i = 0; i < colors.length; i++){
     const heartColor = colorInnerText.includes("♥");
     if(punColor){
         punColors.push(colors[i])
+        color.removeChild(colors[i]);
+
     }else if(heartColor){
         heartColors.push(colors[i])
+        color.removeChild(colors[i]);
+
     }
 }   
 
@@ -242,50 +246,55 @@ const creditCardValidator = () => {
     const resultCC = /^[0-9]{13,16}$/.test(creditCardInput.value);
     const resultZip = /^[0-9]{5}$/.test(creditCardZip.value);
     const resultCVV = /^[0-9]{3}$/.test(creditCardCVV.value);
-
-    if (resultCC || resultZip || resultCVV){
         
-        if(resultCC && errorCreditCardNum  ){
-            creditCardInput.style.border = '0px solid white';
-            errorCreditCardNum.remove();
-        }
-        if(resultZip &&errorCreditCardZip){
-            creditCardZip.style.border = '0px solid white';
-            errorCreditCardZip.remove();
-        }
-        if(resultCVV &&errorCreditCardCVV){
-            creditCardCVV.style.border = '0px solid white';
-            errorCreditCardCVV.remove();
-        }
-        if (resultCC && resultZip && resultCVV){
-            return true;
-        }
-    }else{
-        if(!resultCC){
-            creditCardInput.style.border = '2px solid red';
-            creditCardInput.before(errorCreditCardNum);
-            errorCreditCardNum.innerText = "Please enter valid Credit Card Number.";
+    if(resultCC && errorCreditCardNum  ){
+        creditCardInput.style.border = '0px solid white';
+        errorCreditCardNum.remove();
+    }
+    if(resultZip && errorCreditCardZip){
+        creditCardZip.style.border = '0px solid white';
+        errorCreditCardZip.remove();
+    }
+    if(resultCVV && errorCreditCardCVV){
+        creditCardCVV.style.border = '0px solid white';
+        errorCreditCardCVV.remove();
+    }
+    
+    if(!resultCC){
+        creditCardInput.style.border = '2px solid red';
+        creditCardInput.before(errorCreditCardNum);
+        errorCreditCardNum.innerText = "Please enter valid Credit Card Number.";
 //Exceeds Conditional Error Message 
-            if(creditCardInput.value < 13 ){
-                errorCreditCardNum.innerText = "Credit card number must be at least 13 digits.";
-            }else if (creditCardInput.value > 16){
-                errorCreditCardNum.innerText = "Credit card number must not exceed 16 digits.";
-            }
+        if (creditCardInput.value.length > 16 ){
+            errorCreditCardNum.innerText = "Credit card number must not exceed 16 digits.";
+        }
+        if(creditCardInput.value.length < 13 ){
+            errorCreditCardNum.innerText = "Credit card number must be at least 13 digits.";
+        }
+        if(isNaN(creditCardInput.value)){
+            errorCreditCardNum.innerText = "Credit card number must be at least 13 digits. No special characters or letters";
+        }
 
-        }
-        if(!resultZip){
-            creditCardZip.style.border = '2px solid red';
-            creditCardZip.before(errorCreditCardZip);
-            errorCreditCardZip.innerText = "Please enter valid Zip Code (5 digits).";    
-        }
-        if(!resultCVV){
-            creditCardCVV.style.border = '2px solid red';
-            creditCardCVV.before(errorCreditCardCVV);
-            errorCreditCardCVV.innerText = "Please enter valid Zip Code (5 digits).";
-        }
+    }
+    if(!resultZip){
+        creditCardZip.style.border = '2px solid red';
+        creditCardZip.before(errorCreditCardZip);
+        errorCreditCardZip.innerText = "Please enter valid Zip Code (5 digits).";    
+    }
+    if(!resultCVV){
+        creditCardCVV.style.border = '2px solid red';
+        creditCardCVV.before(errorCreditCardCVV);
+        errorCreditCardCVV.innerText = "Please enter valid CVV Code (3 digits).";
     }
 
-  }
+    if (resultCC && resultZip && resultCVV){
+        return true;
+    }   
+    
+
+}
+
+  
 
 
 /* Submit listener on the form element */
@@ -310,3 +319,58 @@ form.addEventListener('submit', (e) => {
 });
 
 //Thats, it Thank you for your review. I still plant to refactor some areas and come back to fiddle with the CSS.
+
+
+
+// const creditCardValidator = () => {
+//     const creditCardInput = document.getElementById('cc-num');
+//     const creditCardZip = document.getElementById('zip');
+//     const creditCardCVV = document.getElementById('cvv');
+
+//     const resultCC = /^[0-9]{13,16}$/.test(creditCardInput.value);
+//     const resultZip = /^[0-9]{5}$/.test(creditCardZip.value);
+//     const resultCVV = /^[0-9]{3}$/.test(creditCardCVV.value);
+
+//     if (resultCC || resultZip || resultCVV){
+        
+//         if(resultCC && errorCreditCardNum  ){
+//             creditCardInput.style.border = '0px solid white';
+//             errorCreditCardNum.remove();
+//         }
+//         if(resultZip &&errorCreditCardZip){
+//             creditCardZip.style.border = '0px solid white';
+//             errorCreditCardZip.remove();
+//         }
+//         if(resultCVV &&errorCreditCardCVV){
+//             creditCardCVV.style.border = '0px solid white';
+//             errorCreditCardCVV.remove();
+//         }
+//         if (resultCC && resultZip && resultCVV){
+//             return true;
+//         }
+//     }else{
+//         if(!resultCC){
+//             creditCardInput.style.border = '2px solid red';
+//             creditCardInput.before(errorCreditCardNum);
+//             errorCreditCardNum.innerText = "Please enter valid Credit Card Number.";
+// //Exceeds Conditional Error Message 
+//             if(creditCardInput.value < 13 ){
+//                 errorCreditCardNum.innerText = "Credit card number must be at least 13 digits.";
+//             }else if (creditCardInput.value > 16){
+//                 errorCreditCardNum.innerText = "Credit card number must not exceed 16 digits.";
+//             }
+
+//         }
+//         if(!resultZip){
+//             creditCardZip.style.border = '2px solid red';
+//             creditCardZip.before(errorCreditCardZip);
+//             errorCreditCardZip.innerText = "Please enter valid Zip Code (5 digits).";    
+//         }
+//         if(!resultCVV){
+//             creditCardCVV.style.border = '2px solid red';
+//             creditCardCVV.before(errorCreditCardCVV);
+//             errorCreditCardCVV.innerText = "Please enter valid CVV Code (3 digits).";
+//         }
+//     }
+
+//   }
