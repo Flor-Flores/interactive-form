@@ -94,8 +94,6 @@ activity.addEventListener('change', (e) => {
             activityLabels[i].disabled = false;
         }
     }
-
-
 });
 
 
@@ -141,50 +139,47 @@ const email = document.querySelector("#email");
 const errorName = document.createElement("div"); 
 const errorEmail = document.createElement("div"); 
 const errorActivities = document.createElement("div"); 
-const errorCreditCard = document.createElement("div"); 
+const errorCreditCardNum = document.createElement("div"); 
+const errorCreditCardZip = document.createElement("div"); 
+const errorCreditCardCVV = document.createElement("div"); 
 
 const nameValidator = () => {
     const name = document.querySelector('#name');
-  
+
     if(name.value.length > 0){
-      name.style.border = 'white';
-  
-      if(errorName){
+        name.style.border = 'white';
+        if(errorName){
         errorName.remove();
-      }
-      return true;
+        }
+        return true;
     }else{
-      name.style.border = '2px solid red';
-  
-      name.before(errorName);
-      errorName.innerText = "Please enter a valid name";
-      return false;
+        name.style.border = '2px solid red';
+        name.before(errorName);
+        errorName.innerText = "Please enter a valid name";
+        return false;
     }
-  }
-  
+}
+
 
 /* Helper function to validate email input */
 const emailValidator = () => {
     const email = document.querySelector('#mail');
     const atSymb = email.value.indexOf('@');
     const dot = email.value.lastIndexOf('.');
-  
+
     if(atSymb > 1 && dot > atSymb){
-      email.style.border = 'white';
-
-      if(errorEmail){
+        email.style.border = 'white';
+        if(errorEmail){
         errorEmail.remove();
-      }
-      return true;
+        }
+        return true;
     }else{
-      email.style.border = '2px solid red';
-      email.before(errorEmail);
-      errorEmail.innerText = "Please enter a valid email";
-      return false;
+        email.style.border = '2px solid red';
+        email.before(errorEmail);
+        errorEmail.innerText = "Please enter a valid email";
+        return false;
     }
-  
-  }
-
+}
 
 // At least one checkbox under "Register for Activities" section must be selected.
 /* Helper function to validate activities */
@@ -192,12 +187,12 @@ const activitiesValidator = () => {
     const activities = document.querySelectorAll('.activities label input');
     const activityErrLocation = document.querySelector('.activities legend');
     let activitiesCount = [];
+
     for (let i = 0; i <activities.length; i++){
         if(activities[i].checked === true){
             activitiesCount.push(activities[i]);
         }
     }
-
     if(activitiesCount.length > 0){
         activityErrLocation.style.border = '0px solid white';
         if(errorActivities){
@@ -219,24 +214,46 @@ const creditCardValidator = () => {
     const creditCardInput = document.getElementById('cc-num');
     const creditCardZip = document.getElementById('zip');
     const creditCardCVV = document.getElementById('cvv');
-    const creditCardFieldGroup = document.querySelector('#credit-card');
 
     const resultCC = /^[0-9]{13,16}$/.test(creditCardInput.value);
     const resultZip = /^[0-9]{5}$/.test(creditCardZip.value);
     const resultCVV = /^[0-9]{3}$/.test(creditCardCVV.value);
 
-    if (resultCC && resultZip && resultCVV){
-        creditCardFieldGroup.style.border = 'white';
-        if(errorName){
-        errorName.remove();
+    if (resultCC || resultZip || resultCVV){
+        
+        if(resultCC && errorCreditCardNum  ){
+            creditCardInput.style.border = '0px solid white';
+            errorCreditCardNum.remove();
         }
-        return true;
-
+        if(resultZip &&errorCreditCardZip){
+            creditCardZip.style.border = '0px solid white';
+            errorCreditCardZip.remove();
+        }
+        if(resultCVV &&errorCreditCardCVV){
+            creditCardCVV.style.border = '0px solid white';
+            errorCreditCardCVV.remove();
+        }
+        if (resultCC && resultZip && resultCVV){
+            alert('cc validated')
+            return true;
+        }
     }else{
-        creditCardFieldGroup.style.border = '2px solid red';
-        creditCardFieldGroup.before(errorName);
-        errorName.innerText = "Please enter valid Credit Card info.";
-        return false;
+
+        if(!resultCC){
+            creditCardInput.style.border = '2px solid red';
+            creditCardInput.before(errorCreditCardNum);
+            errorCreditCardNum.innerText = "Please enter valid Credit Card Number (between 13-16 digits).";
+        }
+        if(!resultZip){
+            creditCardZip.style.border = '2px solid red';
+            creditCardZip.before(errorCreditCardZip);
+            errorCreditCardZip.innerText = "Please enter valid Zip Code (5 digits).";    
+        }
+        if(!resultCVV){
+            creditCardCVV.style.border = '2px solid red';
+            creditCardCVV.before(errorCreditCardCVV);
+            errorCreditCardCVV.innerText = "Please enter valid Zip Code (5 digits).";
+        }
     }
 
   }
@@ -247,22 +264,15 @@ form.addEventListener('submit', (e) => {
     if(!nameValidator()){
       e.preventDefault();
     }
-
     if(!emailValidator()){
       e.preventDefault();
     }
-
     if(!activitiesValidator()){
         e.preventDefault();
     }
-
     if(paymentSelection === 'credit card'){
         if(!creditCardValidator()){
             e.preventDefault();
         }
     }
-
-    // e.preventDefault();
-
-  console.log('Submit handler is functional!');
 });
