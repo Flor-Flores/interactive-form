@@ -8,21 +8,20 @@ window.onload = function() {
 const colorLabel = document.querySelector('.shirt-colors label');
     colorLabel.innerText = "Please select a T-shirt theme.";
 // creates 2 arrays for the different color sets.
-let color = document.querySelector("#color");
-let colors = document.querySelectorAll("#color option");
-let punColors = [];
-let heartColors= [];
+const color = document.querySelector("#color");
+const colors = document.querySelectorAll("#color option");
+const punColors = [];
+const heartColors= [];
+// loops through the Design option and checks to its value to determine which colors array to display. 
 for (let i = 0; i < colors.length; i++){
-        let colorInnerText = colors[i].innerText.toLowerCase();
-        let punColor = colorInnerText.includes("puns");
-        let heartColor = colorInnerText.includes("♥");
-            if(punColor){
-                punColors.push(colors[i])
-                color.removeChild(colors[i]);
-            }else if(heartColor){
-                heartColors.push(colors[i])
-                color.removeChild(colors[i]);
-            }
+    const colorInnerText = colors[i].innerText.toLowerCase();
+    const punColor = colorInnerText.includes("puns");
+    const heartColor = colorInnerText.includes("♥");
+    if(punColor){
+        punColors.push(colors[i])
+    }else if(heartColor){
+        heartColors.push(colors[i])
+    }
 }   
 
 // function to loop through colorset array
@@ -84,6 +83,8 @@ activity.addEventListener('change', (e) => {
     const checked = clicked.checked;
     const checkedTime = clicked.getAttribute('data-day-and-time');
  
+// if an activity is checked. it loops through the rest and disables any activity that happens at the same time.
+// if this activity changes from  checked to unchecked, it loops though and enables the previously disabled boxes.
     for (let i = 0; i <activityLabels.length; i++) {
 
         if(checked === true) {
@@ -103,6 +104,7 @@ const creditCard = document.querySelector("#payment [value='credit card']" );
 const paypal = document.querySelector("#payment [value='paypal']" );
 const bitcoin = document.querySelector("#payment [value='bitcoin']" );
 
+// sets Credit Card payment as default. and hides others
 creditCard.selected = true;
 
 const creditCardDiv = document.querySelector('#credit-card');
@@ -111,8 +113,7 @@ const bitcoinDiv = document.querySelector("#bitcoin" );
 
 paypalDiv.style.display = 'none';
 bitcoinDiv.style.display = 'none';
-
-
+// listens to changes in the payment selection and displays the corresponding selected payment field.
 payments.addEventListener('change', (e) => {
     paymentSelection = e.target.value;
     if (paymentSelection === creditCard.value ){
@@ -132,8 +133,6 @@ payments.addEventListener('change', (e) => {
 
 const form = document.querySelector("form");
 const name = document.querySelector("#name");
-const email = document.querySelector("#email");
-
 
 //Divs to display each error.
 const errorName = document.createElement("div"); 
@@ -143,6 +142,7 @@ const errorCreditCardNum = document.createElement("div");
 const errorCreditCardZip = document.createElement("div"); 
 const errorCreditCardCVV = document.createElement("div"); 
 
+/* Helper function to validate name input */
 const nameValidator = () => {
     const name = document.querySelector('#name');
 
@@ -161,9 +161,9 @@ const nameValidator = () => {
 }
 
 
-/* Helper function to validate email input */
+/* Helper function to validate email input */ 
+const email = document.querySelector('#mail');
 const emailValidator = () => {
-    const email = document.querySelector('#mail');
     const atSymb = email.value.indexOf('@');
     const dot = email.value.lastIndexOf('.');
 
@@ -180,9 +180,31 @@ const emailValidator = () => {
         return false;
     }
 }
+/* Real-time Error Messages on Email field Exceeds (used index of in previous validation. and regex on this for practice)*/
 
-// At least one checkbox under "Register for Activities" section must be selected.
+email.addEventListener('input', (e) => {
+    const resultEmailValidation = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/.test(email.value.toUpperCase());
+    if(resultEmailValidation){
+        email.style.border = 'white';
+        if(errorEmail){
+        errorEmail.remove();
+        }
+        return true;
+    }else{
+        email.style.border = '2px solid red';
+        email.before(errorEmail);
+        errorEmail.innerText = "Please enter a valid email";
+        return false;
+    }
+});
+
+
+
+
 /* Helper function to validate activities */
+// At least one checkbox under "Register for Activities" section must be selected.
+// loops through activities and if one of them is checked, it pushes it to the array, 
+// then use the array length to check if at least one activity has been selected. 
 const activitiesValidator = () => {
     const activities = document.querySelectorAll('.activities label input');
     const activityErrLocation = document.querySelector('.activities legend');
@@ -210,6 +232,8 @@ const activitiesValidator = () => {
 let paymentSelection = document.querySelector('#payment').value;
 
 /* Helper function to validate credit card */
+// display error messages for each input field,
+// Exceeds Conditional Error Message on Credit Card Number input field.
 const creditCardValidator = () => {
     const creditCardInput = document.getElementById('cc-num');
     const creditCardZip = document.getElementById('zip');
@@ -234,15 +258,20 @@ const creditCardValidator = () => {
             errorCreditCardCVV.remove();
         }
         if (resultCC && resultZip && resultCVV){
-            alert('cc validated')
             return true;
         }
     }else{
-
         if(!resultCC){
             creditCardInput.style.border = '2px solid red';
             creditCardInput.before(errorCreditCardNum);
-            errorCreditCardNum.innerText = "Please enter valid Credit Card Number (between 13-16 digits).";
+            errorCreditCardNum.innerText = "Please enter valid Credit Card Number.";
+//Exceeds Conditional Error Message 
+            if(creditCardInput.value < 13 ){
+                errorCreditCardNum.innerText = "Credit card number must be at least 13 digits.";
+            }else if (creditCardInput.value > 16){
+                errorCreditCardNum.innerText = "Credit card number must not exceed 16 digits.";
+            }
+
         }
         if(!resultZip){
             creditCardZip.style.border = '2px solid red';
@@ -260,6 +289,8 @@ const creditCardValidator = () => {
 
 
 /* Submit listener on the form element */
+// check if fields are valid, if not it prevents the default submit behaviour.
+// conditional for Credit Card, only checks for validation if its selected. 
 form.addEventListener('submit', (e) => {
     if(!nameValidator()){
       e.preventDefault();
@@ -275,4 +306,7 @@ form.addEventListener('submit', (e) => {
             e.preventDefault();
         }
     }
+
 });
+
+//Thats, it Thank you for your review. I still plant to refactor some areas and come back to fiddle with the CSS.
