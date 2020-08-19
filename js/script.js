@@ -56,6 +56,7 @@ document.getElementById("design").addEventListener("change", e =>{
     }
 });
 
+
 let activityTotalDiv = document.createElement("div");
 const activity = document.querySelector('.activities');
 let totalActivityCost = 0;
@@ -65,6 +66,7 @@ const totalString =`Total: $ ${totalActivityCost}`;
 
 
 //event handler looking for changes in the activity section;
+
 activity.addEventListener('change', (e) => {
     let isCheck = e.target.checked;
     let checkedCost = parseInt(e.target.getAttribute('data-cost'));
@@ -85,7 +87,6 @@ activity.addEventListener('change', (e) => {
     for (let i = 0; i <activityLabels.length; i++) {
 
         if(checked === true) {
-            console.log("inside first if")
             if(activityLabels[i].getAttribute('data-day-and-time') === checkedTime && activityLabels[i] !== clicked){
                 activityLabels[i].disabled = true;
             }
@@ -100,7 +101,6 @@ activity.addEventListener('change', (e) => {
 
 //payments
 const payments = document.querySelector('#payment');
-console.log(payments);
 const creditCard = document.querySelector("#payment [value='credit card']" );
 const paypal = document.querySelector("#payment [value='paypal']" );
 const bitcoin = document.querySelector("#payment [value='bitcoin']" );
@@ -132,16 +132,6 @@ payments.addEventListener('change', (e) => {
     }
 });
 
-
-// There are three sections of the form that are always required: name, email, and activities. The
-// credit section—comprised of three inputs—only needs to be validated if “credit card” is the
-// selected payment method. To keep things simple, you can create a function to validate each
-// required section, as well as add and remove a validation error indicator of some sort.
-// Each required section will need to be tested to see if it meets certain criteria, which are detailed
-// in the project instructions. If the criteria are not met, the validation function should add a
-// validation error indication for that field and return false. Else, the function should remove any
-// validation error indicator and return true.
-
 const form = document.querySelector("form");
 const name = document.querySelector("#name");
 const email = document.querySelector("#email");
@@ -151,6 +141,7 @@ const email = document.querySelector("#email");
 const errorName = document.createElement("div"); 
 const errorEmail = document.createElement("div"); 
 const errorActivities = document.createElement("div"); 
+const errorCreditCard = document.createElement("div"); 
 
 const nameValidator = () => {
     const name = document.querySelector('#name');
@@ -171,8 +162,6 @@ const nameValidator = () => {
     }
   }
   
-
-
 
 /* Helper function to validate email input */
 const emailValidator = () => {
@@ -195,50 +184,62 @@ const emailValidator = () => {
     }
   
   }
+
+
 // At least one checkbox under "Register for Activities" section must be selected.
 /* Helper function to validate activities */
 const activitiesValidator = () => {
     const activities = document.querySelectorAll('.activities label input');
     const activityErrLocation = document.querySelector('.activities legend');
+    let activitiesCount = [];
     for (let i = 0; i <activities.length; i++){
-        if(activities[i].checked === false){
-            activityErrLocation.style.border = '2px solid red';
-            activityErrLocation.appendChild(errorActivities);
-            errorActivities.innerText = "Please select at least one activity";
-            return false;
-        }else {
-            alert('you have selected and activity!');
-            activityErrLocation.style.border = '0px solid white';
-            errorActivities.remove();
-            return true;
+        if(activities[i].checked === true){
+            activitiesCount.push(activities[i]);
         }
     }
-    
-  }
+
+    if(activitiesCount.length > 0){
+        activityErrLocation.style.border = '0px solid white';
+        if(errorActivities){
+            errorActivities.remove();
+        }
+        return true;
+    }else {
+        activityErrLocation.style.border = '2px solid red';
+        activityErrLocation.appendChild(errorActivities);
+        errorActivities.innerText = "Please select at least one activity";
+        return false;
+        }
+}
+  
+let paymentSelection = document.querySelector('#payment').value;
 
 /* Helper function to validate credit card */
 const creditCardValidator = () => {
     const creditCardInput = document.getElementById('cc-num');
     const creditCardZip = document.getElementById('zip');
     const creditCardCVV = document.getElementById('cvv');
-    
-    console.log(creditCardInput.value);
-    console.log(creditCardZip.value);
-    console.log(creditCardCVV.value);
+    const creditCardFieldGroup = document.querySelector('#credit-card');
 
-    const str = 'hello world!';
-    const result = /^hello/.test(str);
-    
-    console.log(result); // true
-    
+    const resultCC = /^[0-9]{13,16}$/.test(creditCardInput.value);
+    const resultZip = /^[0-9]{5}$/.test(creditCardZip.value);
+    const resultCVV = /^[0-9]{3}$/.test(creditCardCVV.value);
 
+    if (resultCC && resultZip && resultCVV){
+        creditCardFieldGroup.style.border = 'white';
+        if(errorName){
+        errorName.remove();
+        }
+        return true;
 
+    }else{
+        creditCardFieldGroup.style.border = '2px solid red';
+        creditCardFieldGroup.before(errorName);
+        errorName.innerText = "Please enter valid Credit Card info.";
+        return false;
+    }
 
   }
-
-
-
-
 
 
 /* Submit listener on the form element */
@@ -246,7 +247,7 @@ form.addEventListener('submit', (e) => {
     if(!nameValidator()){
       e.preventDefault();
     }
-  
+
     if(!emailValidator()){
       e.preventDefault();
     }
@@ -254,80 +255,14 @@ form.addEventListener('submit', (e) => {
     if(!activitiesValidator()){
         e.preventDefault();
     }
-    e.preventDefault();
+
+    if(paymentSelection === 'credit card'){
+        if(!creditCardValidator()){
+            e.preventDefault();
+        }
+    }
+
+    // e.preventDefault();
 
   console.log('Submit handler is functional!');
 });
-
-
-
-// //last attempt
-// //last attempt
-// function errorHandler(sibling, errorMessage){
-//     let ValidationError = document.createElement('div');
-//     ValidationError.innerText = errorMessage;
-//     ValidationError.className = 'Validation-Error';
-//     sibling.appendChild(ValidationError);
-//     // sibling.removeChild(ValidationError);
-
-// }
-// function errorDelete(sibling){
-// sibling.removeChild(sibling.childNodes[0]);
-
-// }
-
-// const form = document.querySelector('form');
-
-// function nameValidator(e){
-
-// const name = document.querySelector('#name');
-// let label = document.querySelector('#name').previousElementSibling;
-
-
-// if(name.value.length <= 0 ){
-//     console.log('please enter a name')
-
-//     errorHandler(label, 'Please enter a name')
-
-// }else if(name.value.length >= 0){
-
-//     errorDelete(label);
-
-
-// }
-
-// }
-
-
-
-
-
-// let label = name.previousElementSibling;
-
-// const form = document.querySelector('form');
-
-// form.addEventListener('submit', (e)=>{
-//     const name = document.querySelector('#name');
-//     let label = name.previousElementSibling;
-//     console.log(label)
-
-//     let nameError = document.createElement('div');
-//     nameError.innerText = "please enter a name";
-
-//     if(name.value.length <= 0 ){
-//         console.log(name);
-//         console.log('please enter a name')
-//             label.appendChild(nameError);
-//             // var x = document.getElementById("item2").previousSibling.innerHTML;
-
-
-//         e.preventDefault();
-//     }else if(name.value.length >= 0){
-//         alert('thank you for the name');
-
-//     }
-
-//     e.preventDefault();
-// })
-
-
