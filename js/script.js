@@ -1,13 +1,31 @@
 //focuses on the first form field when page is loaded
 window.onload = function() {
   document.getElementById('name').focus();
-    const job_other = document.getElementById('other-title').style.display = "none";
 }
+
+// hides the "other job role" input field.
+// then listens for changes, if "other"  is selected, it displays the "other job role" input again.
+const jobOtherField = document.getElementById('other-title');
+const jobSelection = document.querySelector("#title ");
+
+jobOtherField.style.display = "none";
+
+jobSelection.addEventListener('change', (e) => {
+    if (e.target.value === 'other'){
+        jobOtherField.style.display = "block";
+    }else{
+        jobOtherField.style.display = "none";
+    }
+});
 
 //changes text from Color to "Please select a T-shirt theme."
 const colorLabel = document.querySelector('.shirt-colors label');
     colorLabel.innerText = "Please select a T-shirt theme.";
-// creates 2 arrays for the different color sets.
+const selectTheme = document.querySelector("#design option:nth-child(1)" );
+    // hides the 'Select Payment' option.
+    selectTheme.hidden = true;
+
+    // creates 2 arrays for the different color sets.
 const color = document.querySelector("#color");
 const colors = document.querySelectorAll("#color option");
 const punColors = [];
@@ -107,9 +125,12 @@ const payments = document.querySelector('#payment');
 const creditCard = document.querySelector("#payment [value='credit card']" );
 const paypal = document.querySelector("#payment [value='paypal']" );
 const bitcoin = document.querySelector("#payment [value='bitcoin']" );
+const selectPayment = document.querySelector("#payment > option:nth-child(1)" );
 
 // sets Credit Card payment as default. and hides others
 creditCard.selected = true;
+// hides the 'Select Payment' option.
+selectPayment.hidden = true;
 
 const creditCardDiv = document.querySelector('#credit-card');
 const paypalDiv = document.querySelector("#paypal" );
